@@ -26,6 +26,7 @@ class MobileChatScreen extends ConsumerWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Loader();
                 }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

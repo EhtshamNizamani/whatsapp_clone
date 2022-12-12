@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/colors.dart';
 import 'package:whatsapp_clone/features/chat/widgets/contact_list.dart';
 import 'package:whatsapp_clone/features/landing/screens/auth/controller/auth_controller.dart';
+import 'package:whatsapp_clone/features/status/screen/status_contact_screen.dart';
 
 import '../features/select_contacts/screen/select_contact_screen.dart';
 
@@ -14,11 +15,12 @@ class MobileScreenLayout extends ConsumerStatefulWidget {
 }
 
 class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+  late TabController controller;
   @override
   void initState() {
     super.initState();
-
+    controller = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -68,12 +70,13 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
               color: Colors.grey,
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
+            controller: controller,
             unselectedLabelColor: Colors.grey,
             indicatorColor: tabColor,
             labelColor: tabColor,
             indicatorWeight: 4,
-            tabs: [
+            tabs: const [
               Tab(
                 text: 'CHATS',
               ),
@@ -86,7 +89,14 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
             ],
           ),
         ),
-        body: const ContactList(),
+        body: TabBarView(
+          controller: controller,
+          children: const [
+            ContactList(),
+            StatusContactScreen(),
+            Text('calls'),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
             backgroundColor: tabColor,
             onPressed: () {
